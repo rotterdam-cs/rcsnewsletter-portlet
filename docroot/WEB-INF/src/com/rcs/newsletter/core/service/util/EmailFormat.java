@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalArticleDisplay;
@@ -120,7 +121,13 @@ public class EmailFormat {
 
             //Replace Confirmation Link Information
             StringBuilder confirmationLinkBuilder = new StringBuilder(portalUrl);
-            confirmationLinkBuilder.append(ONLINE_NEWSLETTER_CONFIRMATION_PAGE);
+            
+            String onlineNewsletterConfirmationPage = (PropsUtil.get("ONLINE_NEWSLETTER_CONFIRMATION_PAGE") != null 
+            		&& !PropsUtil.get("ONLINE_NEWSLETTER_CONFIRMATION_PAGE").equals("")
+            		? PropsUtil.get("ONLINE_NEWSLETTER_CONFIRMATION_PAGE") : ONLINE_NEWSLETTER_CONFIRMATION_PAGE);
+            
+            //confirmationLinkBuilder.append(ONLINE_NEWSLETTER_CONFIRMATION_PAGE);
+            confirmationLinkBuilder.append(onlineNewsletterConfirmationPage);
             confirmationLinkBuilder.append("?subscriptionId=");
             confirmationLinkBuilder.append(subscription.getId());
             confirmationLinkBuilder.append("&activationkey=");
@@ -130,7 +137,8 @@ public class EmailFormat {
 
             //Replace UNREGISTER Confirmation Link Information            
             StringBuilder unregisterStringBuilder = new StringBuilder(portalUrl);
-            unregisterStringBuilder.append(ONLINE_NEWSLETTER_CONFIRMATION_PAGE);
+            //unregisterStringBuilder.append(ONLINE_NEWSLETTER_CONFIRMATION_PAGE);
+            unregisterStringBuilder.append(onlineNewsletterConfirmationPage);
             unregisterStringBuilder.append("?unsubscriptionId=");
             unregisterStringBuilder.append(subscription.getId());
             unregisterStringBuilder.append("&deactivationkey=");
@@ -141,7 +149,14 @@ public class EmailFormat {
             //Replace Online Viewer Link Information
             if (archiveId != null) {
                 StringBuilder onlineViewerStringBuilder = new StringBuilder(portalUrl);
-                onlineViewerStringBuilder.append(ONLINE_NEWSLETTER_VIEWER_PAGE);
+                
+                String onlineNewsletterViewerPage = (PropsUtil.get("ONLINE_NEWSLETTER_VIEWER_PAGE") != null 
+                		&& !PropsUtil.get("ONLINE_NEWSLETTER_VIEWER_PAGE").equals("")
+                		? PropsUtil.get("ONLINE_NEWSLETTER_VIEWER_PAGE") : ONLINE_NEWSLETTER_VIEWER_PAGE);
+                
+                //onlineViewerStringBuilder.append(ONLINE_NEWSLETTER_VIEWER_PAGE);
+                onlineViewerStringBuilder.append(onlineNewsletterViewerPage);
+                
                 onlineViewerStringBuilder.append("?nlid=");
                 onlineViewerStringBuilder.append(archiveId);
                 onlineViewerStringBuilder.append("&sid=");
