@@ -21,7 +21,7 @@ h3. Liferay - Newsletter Portlet
 h5. Component required:
 
 	Liferay IDE - To modify the sources and deploy on liferay portal.
-	Liferay 6.2 CE GA2 and Liferay 6.2 EE GA16.1 CE ga1 
+	Liferay 6.2 CE GA2 and Liferay 6.2 EE GA1 
 
 h5. Setup/Configure
 
