@@ -60,6 +60,12 @@
             <short-title>Registration Confirmation</short-title>
             <keywords>Registration Confirmation</keywords>
         </portlet-info>
+        <portlet-preferences>
+            <preference>
+                <name>portletSetupShowBorders</name>
+                <value>false</value>
+            </preference>
+        </portlet-preferences>
 		<security-role-ref>
 			<role-name>administrator</role-name>
 		</security-role-ref>
