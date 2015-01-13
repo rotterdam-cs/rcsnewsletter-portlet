@@ -69,7 +69,14 @@ public class MailingController extends GenericController {
     @ResourceMapping("mailing")
     public ModelAndView mailingTab(ResourceRequest request, ResourceResponse response){
         Map<String,Object> model = new HashMap<String,Object>();
-        return new ModelAndView("admin/mailing", model);
+        
+        // get all articles
+        List<JournalArticleDTO> articles = mailingService.findAllArticlesForMailing(Utils.getThemeDisplay(request));
+        if (articles.size() > 0) {
+        	return new ModelAndView("admin/mailing", model);
+        } else {
+        	return new ModelAndView("admin/nomailingcanbecreated", model);
+        }
     }
     
     

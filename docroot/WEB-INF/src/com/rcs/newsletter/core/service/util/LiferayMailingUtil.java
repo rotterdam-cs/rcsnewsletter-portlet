@@ -52,9 +52,9 @@ public class LiferayMailingUtil {
             MailMessage message = EmailFormat.getMailMessageWithAttachedImages(fromIA, toIA, subject, content);                        
             message.setBody(content);
             
-            log.error("***** content:");            
-            log.error(content);
-            log.error("***********************");
+            log.info("***** content:");            
+            log.info(content);
+            log.info("***********************");
             
             MailEngineNL.send(message);
                         

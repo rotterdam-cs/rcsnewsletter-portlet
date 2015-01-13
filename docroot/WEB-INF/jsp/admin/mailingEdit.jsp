@@ -44,7 +44,7 @@
     <table>
         <tr>
             <td><label><fmt:message key="newsletter.tab.mailing.field.label.id" /></label></td>
-            <td><form:hidden path="id" /></td>
+            <td><c:out value="${mailing.id}"/> <form:hidden path="id" /></td>
         </tr>
         <tr>
             <td><label><fmt:message key="newsletter.tab.mailing.field.label.name" /></label></td>
@@ -318,7 +318,7 @@
                    	</c:if>
                 },
                 failure: function(response) {
-                	//console.log(response);
+					//console.log(response);
                 }
             });        	
         }

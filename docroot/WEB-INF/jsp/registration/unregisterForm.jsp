@@ -117,6 +117,7 @@
                                 if (response.success){
                                     showMessages(response.messages);
                                     form.resetForm();
+                                    $('#unregister-form-${namespace} .error').text('');
                                 }else{
                                     showErrors(response.validationKeys);
                                 }

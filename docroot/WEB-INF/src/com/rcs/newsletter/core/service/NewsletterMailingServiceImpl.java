@@ -157,9 +157,9 @@ class NewsletterMailingServiceImpl extends CRUDServiceImpl<NewsletterMailing> im
             MailMessage message = EmailFormat.getMailMessageWithAttachedImages(fromIA, toIA, title, content);
             String bodyContent = message.getBody();
             
-            logger.error("***** generating bodyContent:");
-            logger.error(bodyContent);
-            logger.error("***********************");
+            logger.info("***** generating bodyContent:");
+            logger.info(bodyContent);
+            logger.info("***********************");
 
             int logcounter = 0;
             for (NewsletterSubscription newsletterSubscription : mailing.getList().getSubscriptions()) {
@@ -182,9 +182,9 @@ class NewsletterMailingServiceImpl extends CRUDServiceImpl<NewsletterMailing> im
                   //Log message each 100 submissions
                     logcounter++;
                     if (logcounter == 100) {
-                        logger.error("***** Message:");
-                        logger.error(tmpContent);
-                        logger.error("***********************");
+                        logger.info("***** Message:");
+                        logger.info(tmpContent);
+                        logger.info("***********************");
                         logcounter = 0;
                     }
                 }
@@ -338,7 +338,7 @@ class NewsletterMailingServiceImpl extends CRUDServiceImpl<NewsletterMailing> im
             
             return ServiceActionResult.buildSuccess(savedDTO);
         } else {
-        	logger.error("Mailing didn't Save/Update");
+        	logger.info("Mailing didn't Save/Update");
             return ServiceActionResult.buildFailure(null);
         }
     }
@@ -447,7 +447,7 @@ class NewsletterMailingServiceImpl extends CRUDServiceImpl<NewsletterMailing> im
                 logger.error("Could not filter the articles by this category, type, or tag", ex);
             }
         }catch(Exception e){
-            logger.error("Error trying to get articles for Mailing. Exception: " + e.getMessage(), e);
+            logger.info("There are no articles for Mailing.");
         }
         
         return articlesDTO;

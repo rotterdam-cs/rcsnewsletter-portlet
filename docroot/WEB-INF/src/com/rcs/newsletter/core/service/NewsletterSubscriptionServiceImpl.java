@@ -84,19 +84,19 @@ public class NewsletterSubscriptionServiceImpl extends CRUDServiceImpl<Newslette
     public CreateMultipleSubscriptionsResult createSubscriptionsForCategory(CreateMultipleSubscriptionsResult result, ThemeDisplay themeDisplay, long categoryId, List<NewsletterSubscriptionDTO> newSubscriptions) {
         if (newSubscriptions == null){
             result.setSuccess(false);
-            logger.error("newSubscriptions null");
+            logger.info("newSubscriptions null");
             return result;
         }
         if (newSubscriptions.isEmpty()){
             result.setSuccess(false);
-            logger.error("newSubscriptions empty");
+            logger.info("newSubscriptions empty");
             return result; 
         }
         
         ServiceActionResult<NewsletterCategory> sarCategory = categoryService.findById(categoryId);
         if (!sarCategory.isSuccess()){
             result.setSuccess(false);
-            logger.error("sarCategory not Success");
+            logger.info("sarCategory not Success");
             return result;
         }
         

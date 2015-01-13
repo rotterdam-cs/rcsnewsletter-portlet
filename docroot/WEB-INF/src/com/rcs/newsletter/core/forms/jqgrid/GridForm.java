@@ -101,7 +101,7 @@ public class GridForm {
                 try {
                     filtersForm =  mapper.readValue(filters.getBytes(), GridFiltersForm.class);
                 } catch (Exception ex) {
-                    //logger.error("Error trying to convert GridFiltersForm. Exception: " + ex.getMessage(), ex);
+
                 }
             }
             if (filtersForm == null){

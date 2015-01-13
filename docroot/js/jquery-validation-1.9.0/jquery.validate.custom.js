@@ -11,3 +11,13 @@ $.validator.addMethod(
         },
         $.validator.messages.email
 );
+$.validator.addMethod(
+        "custom-list",
+        function(value, element) {
+            {
+                if (element.value === "0") {return false;}
+                else return true;
+             }
+        },
+        $.validator.messages.required
+);

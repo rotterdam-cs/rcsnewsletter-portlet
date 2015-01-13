@@ -32,8 +32,6 @@
     <portlet>
         <portlet-name>NewsletterRegistration</portlet-name>
         <icon>/icon.png</icon>
-       <!-- #17044 -->
-<!--         <configuration-action-class>com.rcs.newsletter.portlets.newsletterregistration.NewsletterRegistrationEditController</configuration-action-class> -->
         <instanceable>true</instanceable>
         <requires-namespaced-parameters>false</requires-namespaced-parameters>
         <header-portlet-css>/css/newsletter.css</header-portlet-css>
@@ -44,7 +42,6 @@
         <header-portlet-javascript>/js/jquery-ui-1.8.16.custom-redmond/js/jquery-ui-1.8.16.custom.min.js</header-portlet-javascript>
         <header-portlet-javascript>/js/jquery-ui-1.8.16.custom-redmond/development-bundle/ui/i18n/jquery.ui.datepickerlocale.jsp</header-portlet-javascript>
         <footer-portlet-javascript>/js/jquery.jqGrid-4.3.1/js/i18n/jqgridlocale.jsp</footer-portlet-javascript>
-        <footer-portlet-javascript>/js/jquery.jqGrid-4.3.1/js/jquery.jqGrid.src.js</footer-portlet-javascript>
         <footer-portlet-javascript>/js/jquery.form/jquery.form.js</footer-portlet-javascript>
         <footer-portlet-javascript>/js/jquery-validation-1.9.0/jquery.validate.min.js</footer-portlet-javascript>
         <footer-portlet-javascript>/js/jquery-validation-1.9.0/jquery.validate.custom.js</footer-portlet-javascript>
@@ -64,7 +61,6 @@
         <header-portlet-javascript>/js/jquery-ui-1.8.16.custom-redmond/js/jquery-ui-1.8.16.custom.min.js</header-portlet-javascript>
         <header-portlet-javascript>/js/jquery-ui-1.8.16.custom-redmond/development-bundle/ui/i18n/jquery.ui.datepickerlocale.jsp</header-portlet-javascript>
         <footer-portlet-javascript>/js/jquery.jqGrid-4.3.1/js/i18n/jqgridlocale.jsp</footer-portlet-javascript>
-        <footer-portlet-javascript>/js/jquery.jqGrid-4.3.1/js/jquery.jqGrid.src.js</footer-portlet-javascript>
         <footer-portlet-javascript>/js/jquery.form/jquery.form.js</footer-portlet-javascript>
         <footer-portlet-javascript>/js/jquery-validation-1.9.0/jquery.validate.min.js</footer-portlet-javascript>
         <footer-portlet-javascript>/js/jquery-validation-1.9.0/localization/messageslocale.jsp</footer-portlet-javascript>
@@ -84,7 +80,6 @@
         <header-portlet-javascript>/js/jquery-ui-1.8.16.custom-redmond/js/jquery-ui-1.8.16.custom.min.js</header-portlet-javascript>
         <header-portlet-javascript>/js/jquery-ui-1.8.16.custom-redmond/development-bundle/ui/i18n/jquery.ui.datepickerlocale.jsp</header-portlet-javascript>
         <footer-portlet-javascript>/js/jquery.jqGrid-4.3.1/js/i18n/jqgridlocale.jsp</footer-portlet-javascript>
-        <footer-portlet-javascript>/js/jquery.jqGrid-4.3.1/js/jquery.jqGrid.src.js</footer-portlet-javascript>
         <footer-portlet-javascript>/js/jquery.form/jquery.form.js</footer-portlet-javascript>
         <footer-portlet-javascript>/js/jquery-validation-1.9.0/jquery.validate.min.js</footer-portlet-javascript>
         <footer-portlet-javascript>/js/jquery-validation-1.9.0/localization/messageslocale.jsp</footer-portlet-javascript>

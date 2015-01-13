@@ -790,31 +790,6 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
     }
 
     /**
-     * Returns the db encoded string of the original. Encoding is done via input.getBytes(DBENCODING), which is most likely ISO-8859-1.
-     *
-     * @param input The string to dbencode.
-     *
-     * @return A dbencoded string, or an empty String in case an encoding exception occured.
-     *         If the input parameter was null, the result will be null as well.
-     */
-//    public static final String getDBEncoded(String input) {
-//        if (input == null) {
-//            return null;
-//        }
-//
-//        String returnString = "";
-//
-//        try {
-//            returnString = new String(input.getBytes(DBENCODING));
-//        } catch (Exception e) {
-//            logger.error("encoding exception", e);
-//        }
-//
-//        return returnString;
-//
-//    }
-
-    /**
      * DOCUMENT ME!
      *
      * @param input DOCUMENT ME!
@@ -857,7 +832,7 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
                 returnString = "/images/iconGIF.gif";
             }
         } catch (Exception e) {
-            logger.warn("exception: ", e);
+            logger.error("exception: ", e);
             logger.error("mimetype error");
         }
 
