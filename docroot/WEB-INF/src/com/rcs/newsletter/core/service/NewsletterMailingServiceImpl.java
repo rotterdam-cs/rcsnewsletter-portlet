@@ -352,7 +352,8 @@ class NewsletterMailingServiceImpl extends CRUDServiceImpl<NewsletterMailing> im
             for(NewsletterTemplateBlock block: blocks){
                 JournalArticleDTO articleDTO = new JournalArticleDTO();
                 try{
-                    JournalArticle article =  JournalArticleLocalServiceUtil.getLatestArticle(themeDisplay.getScopeGroupId(), String.valueOf(block.getArticleId()));
+                    JournalArticle _article =  JournalArticleLocalServiceUtil.getLatestArticle(themeDisplay.getScopeGroupId(), String.valueOf(block.getArticleId()));
+        			JournalArticle article = JournalArticleLocalServiceUtil.getArticle(_article.getGroupId(), _article.getArticleId());                    
                     articleDTO.setId(block.getArticleId());
                     articleDTO.setName(article.getTitle(themeDisplay.getLocale()));
                     mailingDTO.getArticles().add(articleDTO);

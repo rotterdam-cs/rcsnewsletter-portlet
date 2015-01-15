@@ -46,12 +46,12 @@
     
     <table>
         <tr>
-            <td><label><fmt:message key="newsletter.tab.templates.field.label.id" /></label></td>
-            <td><c:out value="${template.id}"/> <input type="hidden" name="id" value="${template.id}" /> </td>
+            <td width="10%"><label><fmt:message key="newsletter.tab.templates.field.label.id" /></label></td>
+            <td width="90%"><c:out value="${template.id}"/> <input type="hidden" name="id" value="${template.id}" /> </td>
         </tr>
         <tr>
-            <td><label><fmt:message key="newsletter.tab.templates.field.label.name" /></label></td>
-            <td><input type="text" name="name" class="required field-long" value="<c:out value="${template.name}" />" /></td>
+            <td width="10%"><label><fmt:message key="newsletter.tab.templates.field.label.name" /></label></td>
+            <td width="90%"><input type="text" name="name" class="required field-long" value="<c:out value="${template.name}" />" onblur="javascript:onblurvalidate();" /></td>
         </tr>
         <tr>
             <td colspan="2" id="td-ckeditor">
@@ -61,7 +61,7 @@
                     </c:if>
                     <c:if test="${!remove}">
                         <input type="hidden" id="inputEditor" name="template"/>
-                        <liferay-ui:input-editor   width="250" height="100" name="template_editor"     />
+                        <liferay-ui:input-editor width="250" height="100" name="template_editor" />
                      </c:if>
             </td>
         </tr>
@@ -98,6 +98,13 @@
             
             
 <script type="text/javascript">
+    
+
+	function onblurvalidate() {
+		$('#template-form-<portlet:namespace/> .error').text('');                    
+	    clearErrors();
+	    jQuery('#template-form-<portlet:namespace/>').validate();
+	}         
     
     jQuery(document).ready(function(){
        styleUI();

@@ -7,11 +7,16 @@ package com.rcs.newsletter.portlets.newsletterregistration;
 import com.liferay.portal.util.PortalUtil;
 import com.rcs.newsletter.commons.GenericController;
 import com.rcs.newsletter.commons.Utils;
+import com.rcs.newsletter.core.dto.NewsletterCategoryDTO;
 import com.rcs.newsletter.core.dto.NewsletterSubscriptionDTO;
+import com.rcs.newsletter.core.model.NewsletterCategory;
+import com.rcs.newsletter.core.service.NewsletterCategoryService;
 import com.rcs.newsletter.core.service.NewsletterSubscriptionService;
+import com.rcs.newsletter.core.service.common.ServiceActionResult;
 import com.rcs.newsletter.portlets.forms.SubscriptionForm;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -38,6 +43,8 @@ public class NewsletterRegistrationController extends GenericController{
  
     @Autowired
     private NewsletterSubscriptionService subscriptionService;
+    @Autowired
+    private NewsletterCategoryService categoryService;
     
     @RenderMapping
     public ModelAndView initialView(RenderRequest request, RenderResponse response){
@@ -63,7 +70,12 @@ public class NewsletterRegistrationController extends GenericController{
         mav.addObject("registerForm", registerForm); // register form
         
         Long listId = Long.valueOf(request.getPreferences().getValue(NewsletterRegistrationEditController.PORTLET_PROPERTY_NEWSLETTER_LIST, "0"));
-        registerForm.setCategoryId(listId);
+        ServiceActionResult<NewsletterCategory> nc = categoryService.findById(listId);
+        if (nc != null && nc.getPayload() != null && nc.getPayload().getId() != null && nc.getPayload().getId() == listId) {
+        	registerForm.setCategoryId(listId);
+        } else {
+        	registerForm.setCategoryId(0);
+        }
         
         boolean showNameFields = !Boolean.valueOf(request.getPreferences().getValue(NewsletterRegistrationEditController.PORTLET_PROPERTY_DISABLED_NAME_FIELDS, "false"));
         mav.addObject("showNameFields", showNameFields); // show first name/last name fields flag

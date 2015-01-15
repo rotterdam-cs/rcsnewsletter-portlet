@@ -410,11 +410,9 @@ public class EmailFormat {
                 //If there is a content related to this block
                 if (ntb.size() > count) {
                     if (ntb.get(count).getArticleId() != null && ntb.get(count).getArticleId() != UNDEFINED) {
-                        JournalArticle ja = JournalArticleLocalServiceUtil.getLatestArticle(themeDisplay.getDoAsGroupId(),ntb.get(count).getArticleId().toString());
+                        JournalArticle _ja = JournalArticleLocalServiceUtil.getLatestArticle(themeDisplay.getDoAsGroupId(),ntb.get(count).getArticleId().toString());
+            			JournalArticle ja = JournalArticleLocalServiceUtil.getArticle(_ja.getGroupId(), _ja.getArticleId());                        
                         
-                        
-                        
-                       // JournalArticleDisplay jad = JournalArticleLocalServiceUtil.getArticleDisplay(ja.getGroupId(), ja.getArticleId(), ja.getTemplateId(), "PRINT", themeDisplay.getLocale().getLanguage(), themeDisplay);
                         JournalArticleDisplay jad = JournalArticleLocalServiceUtil.getArticleDisplay(ja.getGroupId(), ja.getArticleId(), ja.getTemplateId(), "PRINT", themeDisplay.getLocale().getLanguage(), null);
                         String content = jad.getContent();     
                         

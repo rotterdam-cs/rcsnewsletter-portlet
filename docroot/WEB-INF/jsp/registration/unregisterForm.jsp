@@ -37,7 +37,7 @@
 --%>
 
 
-<form:form id="unregister-form-${namespace}"  cssClass="newsletter-forms-form" modelAttribute="registerForm">
+<form:form id="unregister-form-${namespace}"  cssClass="newsletter-forms-form" modelAttribute="registerForm" onsubmit="javascript:validateSubmit();return false;">
     <form:hidden path="categoryId"  />
     <table>
         <tr>
@@ -82,7 +82,7 @@
         
         <c:if test="${registerForm.categoryId eq 0}">
                 showErrors(['<fmt:message key="newsletter.registration.settings.error.nolistfound" />']);
-    </c:if>
+    	</c:if>
             });
     
             /**
@@ -102,41 +102,47 @@
         
                 // click on 'Unregister' button
                 jQuery('#btn-unregister-<portlet:namespace/>').click(function(){
-                    clearMessages();
-                    clearErrors();
-                    // validate form
-                    var form = jQuery('#unregister-form-${namespace}');
-                    if (form.valid()){ 
-                 
-                        // send data via ajax
-                        jQuery.ajax({
-                            url: '${unregisterUrl}'
-                            ,type: 'POST'
-                            ,data: form.serialize()
-                            ,success: function(response){
-                                if (response.success){
-                                    showMessages(response.messages);
-                                    form.resetForm();
-                                    $('#unregister-form-${namespace} .error').text('');
-                                }else{
-                                    showErrors(response.validationKeys);
-                                }
-                            }
-                            ,failure: function(response){
-                                // TODO: display errors here
-                            }
-                        });
-                    }
+					validateSubmit();
                 });
         
           
             }
     
     
+            function validateSubmit(){
+                clearMessages();
+                clearErrors();
+                // validate form
+                var form = jQuery('#unregister-form-${namespace}');
+                if (form.valid()){ 
+                    $('#unregister-form-${namespace} .error').text('');
+                    // send data via ajax
+                    jQuery.ajax({
+                        url: '${unregisterUrl}'
+                        ,type: 'POST'
+                        ,data: form.serialize()
+                        ,success: function(response){
+                            if (response.success){
+                                showMessages(response.messages);
+                                form.resetForm();
+                                $('#unregister-form-${namespace} .error').text('');
+                            }else{
+                                showErrors(response.validationKeys);
+                            }
+                        }
+                        ,failure: function(response){
+                            // TODO: display errors here
+                        }
+                    });
+                }
+            }
+            
             /**
              *  Loads unregister view
              */
             function loadRegisterView(){
+                clearMessages();
+                clearErrors();
                 $('#newsletter-registration-panel-<portlet:namespace/>').load('${showRegisterFormUrl}');
             }
 </script>

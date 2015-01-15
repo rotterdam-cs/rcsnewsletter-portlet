@@ -43,20 +43,20 @@
 <form:form id="mailing-form-${namespace}"  cssClass="newsletter-forms-form" modelAttribute="mailing" >
     <table>
         <tr>
-            <td><label><fmt:message key="newsletter.tab.mailing.field.label.id" /></label></td>
-            <td><c:out value="${mailing.id}"/> <form:hidden path="id" /></td>
+            <td width="10%"><label><fmt:message key="newsletter.tab.mailing.field.label.id" /></label></td>
+            <td width="90%"><c:out value="${mailing.id}"/> <form:hidden path="id" /></td>
         </tr>
         <tr>
-            <td><label><fmt:message key="newsletter.tab.mailing.field.label.name" /></label></td>
-            <td><form:input path="name"  cssClass="field-long required" /></td>
+            <td width="10%"><label><fmt:message key="newsletter.tab.mailing.field.label.name" /></label></td>
+            <td width="90%"><form:input path="name" cssClass="field-long required" /></td>
         </tr>
         <tr>
-            <td><label><fmt:message key="newsletter.tab.mailing.field.label.list" /></label></td>
-            <td><form:select items="${listOptions}" itemLabel="name" itemValue="id" path="listId" cssClass="field-long required" /></td>
+            <td width="10%"><label><fmt:message key="newsletter.tab.mailing.field.label.list" /></label></td>
+            <td width="90%"><form:select items="${listOptions}" itemLabel="name" itemValue="id" path="listId" cssClass="field-long required" /></td>
         </tr>
         <tr>
-            <td><label><fmt:message key="newsletter.tab.mailing.field.label.template" /></label></td>
-            <td>
+            <td width="10%"><label><fmt:message key="newsletter.tab.mailing.field.label.template" /></label></td>
+            <td width="90%">
                 <select id="select-template-<portlet:namespace/>" name="templateId" class="field-long required" onchange="preview();" >
                     <c:forEach items="${templateOptions}" var="t">
                         <option value="${t.id}" 
@@ -68,12 +68,11 @@
             </td>
         </tr>
         <tr>
-        
-            <td colspan="2"><br><fmt:message key="newsletter.tab.mailing.infotext" /></td>
+            <td width="100%" colspan="2"><br><fmt:message key="newsletter.tab.mailing.infotext" /></td>
         </tr>
         
         <tr>
-            <td id="mailing-articles-td" colspan="2">
+            <td width="100%" id="mailing-articles-td" colspan="2">
                 
                 <%-- 
                     Article combo boxes used when editing an existing Mailing
@@ -143,7 +142,10 @@
 
 
 <script type="text/javascript">
-    
+
+	function validatefields() {
+		$('#mailing-form-<portlet:namespace/> .error').text('');   
+	}         
     
     jQuery(document).ready(function(){
         styleUI();
@@ -196,7 +198,7 @@
         
             // click on 'Save' button
             jQuery('#btn-save-<portlet:namespace/>').click(function(){
-
+            	
                 // add 'article' name to all article combos
                 jQuery('#article-combos-<portlet:namespace/> select').attr('name','articleIds');
                 
@@ -220,13 +222,7 @@
                 }
             });
             
-            
-            
-            
         }
-    
-   
-
         
         /**
          * Delete the mailing

@@ -70,13 +70,13 @@ public class NewsletterRegistrationEditController extends GenericController {
 
         // get all lists and select one by default if there is no other one selected already
         List<NewsletterCategoryDTO> lists = categoryService.findAllNewsletterCategories(Utils.getThemeDisplay(request));
-        if (lists.size() > 0 && listId.equals(0)) {
+        if (lists.size() > 0 && listId == 0l) {
             settings.setListId(lists.get(0).getId());
             try {
                 request.getPreferences().setValue(PORTLET_PROPERTY_NEWSLETTER_LIST, settings.getListId().toString());
                 request.getPreferences().store();
             } catch (Exception e) {
-                logger.error("Portlet preferences could not be updated. Exception: " + e.getMessage(), e);
+                logger.info("Portlet preferences could not be set by default.");
             }
         }
         NewsletterCategoryDTO emptyCategory = new NewsletterCategoryDTO();
