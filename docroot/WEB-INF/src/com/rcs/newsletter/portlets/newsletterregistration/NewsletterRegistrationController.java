@@ -4,19 +4,7 @@
  */
 package com.rcs.newsletter.portlets.newsletterregistration;
 
-import com.liferay.portal.util.PortalUtil;
-import com.rcs.newsletter.commons.GenericController;
-import com.rcs.newsletter.commons.Utils;
-import com.rcs.newsletter.core.dto.NewsletterCategoryDTO;
-import com.rcs.newsletter.core.dto.NewsletterSubscriptionDTO;
-import com.rcs.newsletter.core.model.NewsletterCategory;
-import com.rcs.newsletter.core.service.NewsletterCategoryService;
-import com.rcs.newsletter.core.service.NewsletterSubscriptionService;
-import com.rcs.newsletter.core.service.common.ServiceActionResult;
-import com.rcs.newsletter.portlets.forms.SubscriptionForm;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -32,6 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
+
+import com.liferay.portal.util.PortalUtil;
+import com.rcs.newsletter.commons.GenericController;
+import com.rcs.newsletter.commons.Utils;
+import com.rcs.newsletter.core.dto.NewsletterSubscriptionDTO;
+import com.rcs.newsletter.core.model.NewsletterCategory;
+import com.rcs.newsletter.core.service.NewsletterCategoryService;
+import com.rcs.newsletter.core.service.NewsletterSubscriptionService;
+import com.rcs.newsletter.core.service.common.ServiceActionResult;
+import com.rcs.newsletter.portlets.forms.SubscriptionForm;
 
 /**
  *
