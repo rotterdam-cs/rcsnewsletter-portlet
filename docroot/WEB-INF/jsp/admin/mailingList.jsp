@@ -72,7 +72,7 @@
     <div id="shedule-newsletter-dialog-<portlet:namespace/>" title="Schedule">
         <p><div id="scheduleDatepicker-<portlet:namespace/>" ></div> 
 
-  			<input id="inputScheduleHours-<portlet:namespace/>"/ style="display:none">
+  			<input id="inputScheduleHours-<portlet:namespace/>" style="display:none">
   			<div id="scheduleHours-<portlet:namespace/>"></div>
   			
         </p>

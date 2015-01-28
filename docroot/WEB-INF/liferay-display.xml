@@ -7,4 +7,7 @@
             <portlet id="NewsletterRegistrationConfirm" />
             <portlet id="OnlineNewsletterViewer" />
     </category>
+    <category name="category.hidden">
+	    <portlet id="NewsletterAdmin" />
+	</category>	
 </display>
