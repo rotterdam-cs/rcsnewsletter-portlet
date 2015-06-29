@@ -3,3 +3,5 @@
 /.project
 docroot/WEB-INF/classes/*
 docroot/js/jquery-validation-1.9.0/demo/multipart/.sass-cache/*
+/.tern-project
+/build.gradle
