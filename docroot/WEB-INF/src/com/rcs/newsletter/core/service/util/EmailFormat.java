@@ -21,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -41,10 +40,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.journal.model.JournalArticle;
-import com.liferay.portlet.journal.model.JournalArticleDisplay;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import com.rcs.newsletter.core.model.NewsletterCategory;
 import com.rcs.newsletter.core.model.NewsletterMailing;
@@ -121,13 +118,7 @@ public class EmailFormat {
 
             //Replace Confirmation Link Information
             StringBuilder confirmationLinkBuilder = new StringBuilder(portalUrl);
-            
-            String onlineNewsletterConfirmationPage = (PropsUtil.get("ONLINE_NEWSLETTER_CONFIRMATION_PAGE") != null 
-            		&& !PropsUtil.get("ONLINE_NEWSLETTER_CONFIRMATION_PAGE").equals("")
-            		? PropsUtil.get("ONLINE_NEWSLETTER_CONFIRMATION_PAGE") : ONLINE_NEWSLETTER_CONFIRMATION_PAGE);
-            
-            //confirmationLinkBuilder.append(ONLINE_NEWSLETTER_CONFIRMATION_PAGE);
-            confirmationLinkBuilder.append(onlineNewsletterConfirmationPage);
+            confirmationLinkBuilder.append(ONLINE_NEWSLETTER_CONFIRMATION_PAGE);
             confirmationLinkBuilder.append("?subscriptionId=");
             confirmationLinkBuilder.append(subscription.getId());
             confirmationLinkBuilder.append("&activationkey=");
@@ -137,8 +128,7 @@ public class EmailFormat {
 
             //Replace UNREGISTER Confirmation Link Information            
             StringBuilder unregisterStringBuilder = new StringBuilder(portalUrl);
-            //unregisterStringBuilder.append(ONLINE_NEWSLETTER_CONFIRMATION_PAGE);
-            unregisterStringBuilder.append(onlineNewsletterConfirmationPage);
+            unregisterStringBuilder.append(ONLINE_NEWSLETTER_CONFIRMATION_PAGE);
             unregisterStringBuilder.append("?unsubscriptionId=");
             unregisterStringBuilder.append(subscription.getId());
             unregisterStringBuilder.append("&deactivationkey=");
@@ -149,14 +139,7 @@ public class EmailFormat {
             //Replace Online Viewer Link Information
             if (archiveId != null) {
                 StringBuilder onlineViewerStringBuilder = new StringBuilder(portalUrl);
-                
-                String onlineNewsletterViewerPage = (PropsUtil.get("ONLINE_NEWSLETTER_VIEWER_PAGE") != null 
-                		&& !PropsUtil.get("ONLINE_NEWSLETTER_VIEWER_PAGE").equals("")
-                		? PropsUtil.get("ONLINE_NEWSLETTER_VIEWER_PAGE") : ONLINE_NEWSLETTER_VIEWER_PAGE);
-                
-                //onlineViewerStringBuilder.append(ONLINE_NEWSLETTER_VIEWER_PAGE);
-                onlineViewerStringBuilder.append(onlineNewsletterViewerPage);
-                
+                onlineViewerStringBuilder.append(ONLINE_NEWSLETTER_VIEWER_PAGE);
                 onlineViewerStringBuilder.append("?nlid=");
                 onlineViewerStringBuilder.append(archiveId);
                 onlineViewerStringBuilder.append("&sid=");
@@ -182,7 +165,19 @@ public class EmailFormat {
      */
     public static String fixImagesPath(String emailBody, ThemeDisplay themeDisplay) {
         String siteURL = getUrl(themeDisplay);
-        String result = emailBody.replaceAll("src=\"/", "src=\" " + siteURL);
+        String result = emailBody.replaceAll("src=\"/", "src=\"" + siteURL);
+        result = result.replaceAll("src='/", "src='" + siteURL);
+        result = result.replaceAll("&amp;", "&");
+        return result;
+    }
+
+    /**
+     * Fix the relative Paths to Absolute Paths on links
+     */
+    public static String fixLinksPath(String emailBody, ThemeDisplay themeDisplay) {
+        String siteURL = getUrl(themeDisplay);
+        String result = emailBody.replaceAll("href=\"/", "href=\"" + siteURL);
+        result = result.replaceAll("href='/", "href='" + siteURL);
         result = result.replaceAll("&amp;", "&");
         return result;
     }
@@ -210,14 +205,15 @@ public class EmailFormat {
      */
     public static File getFile(URL u) throws Exception {
         URLConnection uc = u.openConnection();
-        String contentType = uc.getContentType();
-        int contentLength = uc.getContentLength();
-        if (contentType.startsWith("text/") || contentLength == -1) {
-            throw new IOException("This is not a binary file.");
-        }
         InputStream raw = uc.getInputStream();
         InputStream is = new BufferedInputStream(raw);
-
+        
+        String contentType = uc.getContentType() != null ? uc.getContentType() : URLConnection.guessContentTypeFromStream(is);
+        int contentLength = uc.getContentLength();
+        if ((contentType != null && contentType.startsWith("text/")) || contentLength == -1) {
+            throw new IOException("Problem with URL.");
+        }
+        
         File tmp = null;
         OutputStream output = null;
         try {
@@ -275,14 +271,15 @@ public class EmailFormat {
             URL imageUrl = null;
             try {
                 String imagePathOriginal = (String) images.get(i);
+                log.debug("Original image url: " + imagePathOriginal);
                 String imagePath = StringEscapeUtils.unescapeHtml(image);
                 imagePath = imagePath.trim().replaceAll(" ", "%20");
                 imageUrl = new URL(imagePath);
                 File tempF = getFile(imageUrl);//To Improve probably add Cache
                 content = StringUtils.replace(content, imagePathOriginal, "cid:" + tempF.getName());
                 message.addFileAttachment(tempF);
-            } catch (MalformedURLException ex) {
-                log.error("problem with image url " + image, ex);
+            } catch (Exception ex) {
+                log.error("Problem with image url: " + image, ex);
             }
         }
         message.setBody(content);
@@ -300,14 +297,13 @@ public class EmailFormat {
      * @return an ArrayList with the images paths
      */
     public static ArrayList<String> getImagesPathFromHTML(String htmltext) {
-
+	
         ArrayList<String> imagesList = new ArrayList<String>();
         try {
             // get everything that is inside the <img /> tag
             String[] imagesTag = StringUtils.substringsBetween(htmltext, "<img ", ">");
 
             if (imagesTag != null) { // if there are images
-
                 for (int i = 0; i < imagesTag.length; i++) {
                     // get what is in the src attribute
                     String imagePath = StringUtils.substringBetween(imagesTag[i], "src=\"", "\"");
@@ -315,22 +311,21 @@ public class EmailFormat {
                         imagePath = StringUtils.substringBetween(imagesTag[i], "src='", "'");
                     }
 
+                    log.debug("Image path to process: " + imagePath);
+                    
                     if (!imagesList.contains(imagePath)) { // don't save the duplicated images
                         imagesList.add(imagePath);
                     }
                 }
             }
 
-
-            /// and now for the background images only one style of typing is allowed for now!!!
+            // And now for the background images only one style of typing is allowed for now!!!
             imagesTag = StringUtils.substringsBetween(htmltext, "background=\"", "\"");
-
-
             if (imagesTag != null) {
                 for (int i = 0; i < imagesTag.length; i++) {
                     // get what is in the src attribute
                     String imagePath = imagesTag[i].trim();
-                    log.info("processing: " + imagePath);
+                    log.info("Processing: " + imagePath);
                     if (!imagesList.contains(imagePath)) { // don't save the duplicated images
                         imagesList.add(imagePath);
                     }
@@ -341,17 +336,14 @@ public class EmailFormat {
                 for (int i = 0; i < imagesTag.length; i++) {
                     // get what is in the src attribute
                     String imagePath = imagesTag[i].trim();
-                    log.info("processing: " + imagePath);
+                    log.info("Processing: " + imagePath);
                     if (!imagesList.contains(imagePath)) { // don't save the duplicated images
                         imagesList.add(imagePath);
                     }
                 }
             }
-
-
-
         } catch (Exception ex) {
-            log.error("error in getImagesPathFromHTML: ", ex);
+            log.error("Error in getImagesPathFromHTML: ", ex);
         }
         return imagesList;
     }
@@ -401,43 +393,33 @@ public class EmailFormat {
         //Iterate each Block
         while (m.find()) {
             try {
-                //String toReplace = result.substring(m.start(), m.end() );               
-                
-                
                 toReplaceTmp = resulttmp.substring(m.start() + fTagBlockOpen.length(), m.end() - fTagBlockClose.length());
-
                 
                 //If there is a content related to this block
                 if (ntb.size() > count) {
                     if (ntb.get(count).getArticleId() != null && ntb.get(count).getArticleId() != UNDEFINED) {
-                        JournalArticle _ja = JournalArticleLocalServiceUtil.getLatestArticle(themeDisplay.getDoAsGroupId(),ntb.get(count).getArticleId().toString());
-            			JournalArticle ja = JournalArticleLocalServiceUtil.getArticle(_ja.getGroupId(), _ja.getArticleId());                        
-                        
-                        JournalArticleDisplay jad = JournalArticleLocalServiceUtil.getArticleDisplay(ja.getGroupId(), ja.getArticleId(), ja.getTemplateId(), "PRINT", themeDisplay.getLocale().getLanguage(), null);
-                        String content = jad.getContent();     
-                        
+                	String localeId = themeDisplay.getLocale().getLanguage();
+                	
+                		//*//
+                        JournalArticle _journalArticleObj = JournalArticleLocalServiceUtil.getLatestArticle(themeDisplay.getDoAsGroupId(),ntb.get(count).getArticleId().toString());
+                        JournalArticle ja = JournalArticleLocalServiceUtil.getArticle(_journalArticleObj.getGroupId(), _journalArticleObj.getArticleId());
+                       
+                        String content = JournalArticleLocalServiceUtil.getArticleContent(ja, ja.getTemplateId(), null, localeId, themeDisplay);
                         log.info("Block: " + content);
                         
-                        toReplaceTmp = toReplaceTmp.replace(fTagBlockTitle, jad.getTitle());                        
+                        toReplaceTmp = toReplaceTmp.replace(fTagBlockTitle, ja.getTitle(localeId));                        
                         toReplaceTmp = toReplaceTmp.replace(fTagBlockContent, content);
 
-                        //resulttmp = resulttmp.replaceFirst(toReplace, toReplaceTmp);
-                        //#7467
                         resulttmp = m.replaceFirst(StringUtils.replace(toReplaceTmp, "$",  "\\$"));
-
-
 
                         //If there is a NOT content related to this block the block is deleted
                     } else {
                         resulttmp = m.replaceFirst("");
-                        //m = patternBlock.matcher(resulttmp);
-                        //resulttmp = resulttmp.replaceFirst(toReplace, "");
                     }
 
                     //If there is a NOT content related to this block the block is deleted
                 } else {
                     resulttmp = m.replaceFirst("");
-                    //resulttmp = resulttmp.replaceFirst(toReplace, "");
                 }
                 m = patternBlock.matcher(resulttmp);
 

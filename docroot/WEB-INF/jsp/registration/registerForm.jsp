@@ -126,7 +126,6 @@
                             if (response.success){
                                 showMessages(response.messages);
                                 form.resetForm();
-                                $('#register-form-${namespace} .error').text('');
                             }else{
                                 showErrors(response.validationKeys);
                             }
@@ -146,8 +145,6 @@
      *  Loads unregister view
      */
     function loadUnregisterView(){
-        clearMessages();
-        clearErrors();
         $('#newsletter-registration-panel-<portlet:namespace/>').load('${showUnregisterFormUrl}');
     }
 </script>

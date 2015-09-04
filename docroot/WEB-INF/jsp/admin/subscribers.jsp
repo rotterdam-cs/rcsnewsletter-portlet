@@ -122,8 +122,8 @@
                         }
                     }).trigger("reloadGrid");
                 });
-                
-                /* Search Email Event */
+
+              	/* Search Email Event */
         	 	jQuery("#input-search-email-<portlet:namespace/>").keyup(function() {
         	  		var email = jQuery("#input-search-email-<portlet:namespace/>").val();
         			var postdata = jQuery('#subscribersGrid<portlet:namespace/>').jqGrid('getGridParam','postData');

@@ -18,7 +18,7 @@
     URLs
     ##################
 --%>
-<portlet:resourceURL id='scheduleList' var='scheduleListUrl'/>
+<portlet:resourceURL id='archivesList' var='archivesListUrl'/>
 
 <%--
     Header
@@ -44,6 +44,15 @@
         <tr>
             <td><label><fmt:message key="newsletter.tab.archives.field.label.name" /></label></td>
             <td><input type="text" name="name" class="required field-long" style="width:200px" value="<c:out value="${archive.mailing}" />" /></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <b><fmt:message key="newsletter.tab.archives.label.archivepreview" /></b>
+                <br>
+                <div style="padding:5px; border: solid 1px">
+                    ${archive.emailBody}
+                </div>
+            </td>
         </tr>
         <tr>
             <td colspan="2">
@@ -87,7 +96,7 @@
      
         // click on 'Cancel' button
         jQuery('#btn-cancel-<portlet:namespace/>').click(function(){
-           jQuery('#archives-panel').load('${scheduleListUrl}');
+           jQuery('#archives-panel').load('${archivesListUrl}');
         });
         
        

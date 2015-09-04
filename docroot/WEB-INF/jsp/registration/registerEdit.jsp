@@ -41,7 +41,7 @@
     <table>
         <tr>
             <td><label><fmt:message key="newsletter.registration.settings.field.list" /></label></td>
-            <td><form:select items="${listOptions}" itemLabel="name" itemValue="id" path="listId" cssClass="required custom-list"/> </td>
+            <td><form:select items="${listOptions}" itemLabel="name" itemValue="id" path="listId" /> </td>
         </tr>
         <tr>
             <td><label><fmt:message key="newsletter.registration.settings.field.disablednamefields" /></label></td>
@@ -99,9 +99,7 @@
                     ,data: form.serialize()
                     ,success: function(response){
                         if (response.success){
-                        	form.resetForm();
                             showMessages(response.messages);
-                            $('#settings-form-${namespace} .error').text('');
                         }else{
                             showErrors(response.validationKeys);
                         }

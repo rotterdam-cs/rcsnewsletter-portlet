@@ -13,8 +13,4 @@
     String extLocaleFile = "grid.locale-" + language + ".js";
 %>
 
-<%@ page contentType="text/javascript" %>
-
-<c:import url="<%=extLocaleFile%>"></c:import>
-
-
+<c:import url="<%=extLocaleFile%>" />

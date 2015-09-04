@@ -204,10 +204,6 @@
 	margin-top: 15px;
 }
 
-label{
-	display: inline-block!important;
-}
-
 /*
   JQuery Styles Fixes
  --------------------
@@ -218,11 +214,6 @@ label{
 }
 
 .ui-pg-input{
-    padding: 0px !important;
-    margin-top: 5px !important;
-}
-
-.ui-pg-table{
-	margin-top: -2.5px !important;
+    padding: 2px !important;
 }
 

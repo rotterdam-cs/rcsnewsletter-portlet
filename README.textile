@@ -7,7 +7,7 @@
  @* Licensed under the LGPL License, Version 3.0 (the "License"); you may not use this file except in compliance with@
  @* the License. You may obtain a copy of the License at@
  @*@
- @*   https://github.com/rotterdam-cs/rcsnewsletter/blob/springmvc/docroot/COPYING.LESSER @
+ @*   https://github.com/rotterdam-cs/rcsnewsletter-portlet @
  @*@
  @* Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on@
  @* an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the@
@@ -21,7 +21,7 @@ h3. Liferay - Newsletter Portlet
 h5. Component required:
 
 	Liferay IDE - To modify the sources and deploy on liferay portal.
-	Liferay 6.2 CE GA2 and Liferay 6.2 EE GA1 
+	Liferay portal 6.1
 
 h5. Setup/Configure
 

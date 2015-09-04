@@ -78,11 +78,6 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>resourceGroupId</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
 			<name>resourcePrimKey</name>
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>

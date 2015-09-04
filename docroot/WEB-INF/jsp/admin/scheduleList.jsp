@@ -107,6 +107,7 @@
      * View schedule
      */
     function viewSchedule(scheduleId){
+    	alert();
         jQuery('#archives-panel').load('${viewScheduleUrl}', {id: scheduleId});
     }
     

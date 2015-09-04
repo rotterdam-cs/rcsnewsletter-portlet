@@ -30,11 +30,10 @@ import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
 import com.liferay.portlet.journal.model.JournalArticle;
-import com.liferay.portlet.journal.model.JournalArticleResource;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
-import com.liferay.portlet.journal.service.JournalArticleResourceLocalServiceUtil;
 import com.liferay.portlet.journalcontent.util.JournalContentUtil;
 import com.rcs.newsletter.core.service.NewsletterCategoryService;
+
 /**
  * General Article Utils
  * @author pablo
@@ -75,8 +74,12 @@ public class ArticleUtils {
             List <AssetEntry> assetEntryList = AssetEntryLocalServiceUtil.getEntries(assetEntryQuery);
             if (assetEntryList.size() > 0) {
                 for (AssetEntry ae : assetEntryList) {
-                    JournalArticleResource journalArticleResourceObj = JournalArticleResourceLocalServiceUtil.getJournalArticleResource(ae.getClassPK());
-                    JournalArticle journalArticleObj = JournalArticleLocalServiceUtil.getArticle(journalArticleResourceObj.getGroupId(), journalArticleResourceObj.getArticleId());
+                    
+					//*//JournalArticleResource journalArticleResourceObj = JournalArticleResourceLocalServiceUtil.getJournalArticleResource(ae.getClassPK());
+                    //*//JournalArticle journalArticleObj = JournalArticleLocalServiceUtil.getLatestArticle(themeDisplay.getScopeGroupId(), journalArticleResourceObj.getArticleId());
+	               	JournalArticle _journalArticleObj = JournalArticleLocalServiceUtil.getLatestArticle(ae.getClassPK());
+        			JournalArticle journalArticleObj = JournalArticleLocalServiceUtil.getArticle(_journalArticleObj.getGroupId(), _journalArticleObj.getArticleId());                            
+                    
                     if (journalArticleObj.isApproved()){
                     	journalArticleList.add(journalArticleObj);
                     }
@@ -172,8 +175,8 @@ public class ArticleUtils {
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
-    @SuppressWarnings("deprecation")
-	public static List<JournalArticle> findArticlesByKeyword(ThemeDisplay themeDisplay, String tagName, SearchContext searchContext) throws PortalException, SystemException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    @SuppressWarnings("deprecation")	
+    public static List<JournalArticle> findArticlesByKeyword(ThemeDisplay themeDisplay, String tagName, SearchContext searchContext) throws PortalException, SystemException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         List<JournalArticle> journalArticleList = new ArrayList<JournalArticle>();
         Long companyId = themeDisplay.getCompanyId();        
         BooleanQuery searchQuery = BooleanQueryFactoryUtil.create(searchContext);
@@ -211,10 +214,13 @@ public class ArticleUtils {
             for (Document document : documents) {
                 //Check if is a Journal Article
                 if (JournalArticleLocalServiceUtil.hasArticle(themeDisplay.getScopeGroupId(), document.get(Field.ENTRY_CLASS_PK))) {
+
+                    //*//JournalArticle journalArticleObj = JournalArticleLocalServiceUtil.getArticle(themeDisplay.getScopeGroupId(), document.get(Field.ENTRY_CLASS_PK));
                     JournalArticle _journalArticleObj = JournalArticleLocalServiceUtil.getLatestArticle(themeDisplay.getScopeGroupId(), document.get(Field.ENTRY_CLASS_PK));
                     JournalArticle journalArticleObj = JournalArticleLocalServiceUtil.getArticle(_journalArticleObj.getGroupId(), _journalArticleObj.getArticleId());
-                    if (journalArticleObj.isApproved()){
-                    	journalArticleList.add(journalArticleObj);
+                    
+					if (journalArticleObj.isApproved()){
+						journalArticleList.add(journalArticleObj);
                     }
                 }
             }
@@ -252,13 +258,18 @@ public class ArticleUtils {
             List<String> journalArticlesIds =  new ArrayList<String>();
             for (JournalArticle article : JournalArticleLocalServiceUtil.getJournalArticles(-1, -1)) {
             	if (article.isApproved()){            	
-	                 if (JournalArticleLocalServiceUtil.hasArticle(article.getGroupId(), article.getArticleId())) {
-	                    if (!journalArticlesIds.contains(article.getArticleId())) {
-	                    	JournalArticle a = JournalArticleLocalServiceUtil.getArticle(article.getGroupId(), article.getArticleId());
-	                        journalArticleList.add(a);
-	                        journalArticlesIds.add(article.getArticleId());
-	                    }
-	                }
+                 	if (JournalArticleLocalServiceUtil.hasArticle(article.getGroupId(), article.getArticleId())) {
+                    	if (!journalArticlesIds.contains(article.getArticleId())) {
+
+                    		//JournalArticle a = JournalArticleLocalServiceUtil.getLatestArticle(article.getGroupId(), article.getArticleId());
+                    		//*//JournalArticle a = JournalArticleLocalServiceUtil.getArticle(article.getGroupId(), article.getArticleId());
+		                    JournalArticle _journalArticleObj = JournalArticleLocalServiceUtil.getLatestArticle(article.getGroupId(), article.getArticleId());
+		                    JournalArticle a = JournalArticleLocalServiceUtil.getArticle(_journalArticleObj.getGroupId(), _journalArticleObj.getArticleId());
+
+                        	journalArticleList.add(a);
+                        	journalArticlesIds.add(article.getArticleId());
+                    	}
+                	}
             	}
             }
         } catch (PortalException ex) {
@@ -284,12 +295,17 @@ public class ArticleUtils {
     public static List<JournalArticle> findArticlesByAuthorId(Long userId) throws PortalException, SystemException {
         List<JournalArticle> journalArticleList = new ArrayList<JournalArticle>();
         try {
-            for (JournalArticle article : JournalArticleLocalServiceUtil.getArticles()) {   
+            for (JournalArticle article : JournalArticleLocalServiceUtil.getArticles()) {                
             	if (article.isApproved()){
-	                if (article.getUserId() == userId) {
-	                	JournalArticle a = JournalArticleLocalServiceUtil.getArticle(article.getGroupId(), article.getArticleId());
-	                    journalArticleList.add(a);
-	                }
+                	if (article.getUserId() == userId) {
+
+                    	//JournalArticle a = JournalArticleLocalServiceUtil.getLatestArticle(article.getGroupId(), article.getArticleId());
+                		//*//JournalArticle a = JournalArticleLocalServiceUtil.getArticle(article.getGroupId(), article.getArticleId());
+		                JournalArticle _journalArticleObj = JournalArticleLocalServiceUtil.getLatestArticle(article.getGroupId(), article.getArticleId());
+		                JournalArticle a = JournalArticleLocalServiceUtil.getArticle(_journalArticleObj.getGroupId(), _journalArticleObj.getArticleId());
+                    	
+						journalArticleList.add(a);
+                	}
             	}
             }
         } catch (SystemException ex) {
@@ -311,11 +327,16 @@ public class ArticleUtils {
         try {
             for (JournalArticle article : JournalArticleLocalServiceUtil.getArticles()) {
             	if (article.isApproved()){
-	            	JournalArticle a = JournalArticleLocalServiceUtil.getArticle(article.getGroupId(), article.getArticleId());
-	                if (a.getType().equalsIgnoreCase(type)) {
-                		journalArticleList.add(a);
-	                }
-            	}    
+
+            		//JournalArticle a = JournalArticleLocalServiceUtil.getLatestArticle(article.getGroupId(), article.getArticleId());
+            		//*//JournalArticle a = JournalArticleLocalServiceUtil.getArticle(article.getGroupId(), article.getArticleId());
+	                JournalArticle _journalArticleObj = JournalArticleLocalServiceUtil.getLatestArticle(article.getGroupId(), article.getArticleId());
+	                JournalArticle a = JournalArticleLocalServiceUtil.getArticle(_journalArticleObj.getGroupId(), _journalArticleObj.getArticleId());
+                
+                	if (a.getType().equalsIgnoreCase(type)) {
+                    	journalArticleList.add(a);
+                	}
+            	}
             }
         } catch (SystemException ex) {
             log.error(ex);
@@ -360,16 +381,18 @@ public class ArticleUtils {
         long[] anyCategoryIds = {findCategoryIdByName(category)};
         assetEntryQuery.setAnyCategoryIds(anyCategoryIds);
         List <AssetEntry> assetEntryList = AssetEntryLocalServiceUtil.getEntries(assetEntryQuery);        
-        if (assetEntryList.size() > 0) {
+		if (assetEntryList.size() > 0) {
             for (AssetEntry ae : assetEntryList) {
-                JournalArticleResource journalArticleResourceObj = JournalArticleResourceLocalServiceUtil.getJournalArticleResource(ae.getClassPK());
+
+	            //*//JournalArticleResource journalArticleResourceObj = JournalArticleResourceLocalServiceUtil.getJournalArticleResource(ae.getClassPK());
+	            //*//JournalArticle _journalArticleObj = JournalArticleLocalServiceUtil.getLatestArticle(journalArticleResourceObj.getGroupId(), journalArticleResourceObj.getArticleId());	            	JournalArticle _journalArticleObj = JournalArticleLocalServiceUtil.getLatestArticle(ae.getClassPK());
+	            JournalArticle _journalArticleObj = JournalArticleLocalServiceUtil.getLatestArticle(ae.getClassPK());
+	    		JournalArticle journalArticleObj = JournalArticleLocalServiceUtil.getArticle(_journalArticleObj.getGroupId(), _journalArticleObj.getArticleId());                
                 
-                JournalArticle _journalArticleObj = JournalArticleLocalServiceUtil.getLatestArticle(journalArticleResourceObj.getGroupId(), journalArticleResourceObj.getArticleId());
-    			JournalArticle journalArticleObj = JournalArticleLocalServiceUtil.getArticle(_journalArticleObj.getGroupId(), _journalArticleObj.getArticleId());                
-                if (journalArticleObj != null) {
-                	if (journalArticleObj.isApproved()){
-                		journalArticleList.add(journalArticleObj);
-                	}
+				if (journalArticleObj != null) {
+	               	if (journalArticleObj.isApproved()){
+                   		journalArticleList.add(journalArticleObj);
+					}
                 }
             }
         }

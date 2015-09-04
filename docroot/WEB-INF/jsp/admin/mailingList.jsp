@@ -44,8 +44,8 @@
 <form id="send-test-form-<portlet:namespace/>">
     <table>
         <tr>
-        	<td><input type="button" id="btn-send-test-<portlet:namespace/>" value="<fmt:message key="newsletter.tab.mailing.button.sendtest" />"  /></td>
-            <td><input type="text" id="input-send-test-<portlet:namespace/>" name="sendTestEmail" class="required email" style="width:200px; margin-top: 6px;" placeholder="<fmt:message key="newsletter.tab.mailing.field.placeholder.testemail" />"  />&nbsp;</td>
+            <td><input type="text" id="input-send-test-<portlet:namespace/>" name="sendTestEmail" class="required email" style="width:200px" placeholder="<fmt:message key="newsletter.tab.mailing.field.placeholder.testemail" />"  />&nbsp;</td>
+            <td><input type="button" id="btn-send-test-<portlet:namespace/>" value="<fmt:message key="newsletter.tab.mailing.button.sendtest" />"  /></td>
         </tr>
     </table>
 </form>
@@ -72,7 +72,7 @@
     <div id="shedule-newsletter-dialog-<portlet:namespace/>" title="Schedule">
         <p><div id="scheduleDatepicker-<portlet:namespace/>" ></div> 
 
-  			<input id="inputScheduleHours-<portlet:namespace/>" style="display:none">
+  			<input id="inputScheduleHours-<portlet:namespace/>"/ style="display:none">
   			<div id="scheduleHours-<portlet:namespace/>"></div>
   			
         </p>
@@ -146,8 +146,6 @@
     function initEvents(){
         // click on 'Add Mailing' button
         jQuery('#btn-addmailing-<portlet:namespace/>').click(function(){
-            clearMessages();
-            clearErrors();        	
             jQuery('#mailing-panel').load('${editMailingUrl}');
         });
         
@@ -257,8 +255,6 @@
      * Edit mailing
      */
     function editMailing(mailingId){
-        clearMessages();
-        clearErrors();      	
         jQuery('#mailing-panel').load('${editMailingUrl}', {id: mailingId});
     }
     
@@ -266,9 +262,10 @@
      * Delete mailing
      */
     function deleteMailing(mailingId){
-        clearMessages();
-        clearErrors();      	
         jQuery('#mailing-panel').load('${editMailingUrl}', {id: mailingId, remove: true});
+       
+        
+        
     }
     
     /**
@@ -300,8 +297,6 @@
             }
             ,success: function(response){
                 if (response.success){
-                	$('#send-test-form-<portlet:namespace/> .error').text('');
-                	$('#send-test-form-<portlet:namespace/>').resetForm();
                     showMessages(response.messages);
                 }else{
                     showErrors(response.validationKeys);

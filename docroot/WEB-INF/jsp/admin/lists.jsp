@@ -20,16 +20,9 @@
 <portlet:resourceURL id="getListData" var="getListDataURL"/>
 <portlet:resourceURL id="getCKEditor" var="getCKEditorURL"/>
 
-
+<html>
+    <head>
         <script type="text/javascript">
-        
-        
-        function onblurvalidate() {
-        	$('#addEditDeleteCategory<portlet:namespace/> .error').text('');                    
-            clearErrors();
-            jQuery('#addEditDeleteCategory<portlet:namespace/>').validate();
-        }        
-        
             function initTab(){
                 jQuery('#formContainer<portlet:namespace/>').hide();
                 createGrid();
@@ -164,31 +157,21 @@
                         });
                     }
                 });
-
-            
+                
                 jQuery('#addList<portlet:namespace/>').click(function(){
                     showAddEditDeleteForm('CREATE');
-                    jQuery('#save<portlet:namespace/>').show();
-            		jQuery('#remove<portlet:namespace/>').hide();
                     jQuery("#addEditDeleteCategory<portlet:namespace/> .fieldToDisable").attr("disabled", false);
                 });
                 
                 jQuery('#cancel<portlet:namespace/>').click(function(){
-                    $('#addEditDeleteCategory<portlet:namespace/>').resetForm();
-                    ////validator.resetForm();
-                	$('#addEditDeleteCategory<portlet:namespace/> .error').text('');
-                	clearErrors();                                        
+                    clearErrors();
+                    validator.resetForm();
                     backToGrid();
                 });
 
                 function showAddEditDeleteForm(action){
-                	
-                    $('#addEditDeleteCategory<portlet:namespace/>').resetForm();                   
-                    ////validator.resetForm();
-                    
-                    $('#addEditDeleteCategory<portlet:namespace/> .error').text('');                    
-                    clearErrors();
-                    
+                    jQuery('#addEditDeleteCategory<portlet:namespace/>').resetForm();
+                    validator.resetForm();
                     jQuery('#action<portlet:namespace/>').val(action);
                     jQuery('#gridContainer<portlet:namespace/>').hide();
                     jQuery('#formContainer<portlet:namespace/>').show();                    
@@ -218,7 +201,8 @@
                 }
             }
         </script>
-
+    </head>
+    <body>
         <!-- LISTS TAB -->
         <div id="lists<portlet:namespace/>">
             <!-- Errors viewer -->
@@ -242,19 +226,19 @@
                     <table>
                         <tr>
                             <td><label><fmt:message key="newsletter.admin.general.name"/></label></td>
-                            <td><input type="text" class="newsletter-forms-input-text required fieldToDisable" name="name" onblur="javascript:onblurvalidate();"/></td>
+                            <td><input type="text" class="newsletter-forms-input-text required fieldToDisable" name="name"/></td>
                         </tr>
                         <tr>
                             <td><label><fmt:message key="newsletter.admin.general.description"/></label></td>
-                            <td><textarea name="description" class="newsletter-forms-input-textarea required fieldToDisable" onblur="javascript:onblurvalidate();"></textarea></td>
+                            <td><textarea name="description" class="newsletter-forms-input-textarea required fieldToDisable"></textarea></td>
                         </tr>
                         <tr>
                             <td><label><fmt:message key="newsletter.admin.category.fromname" bundle="${newsletter}"/></label></td>
-                            <td><input type="text" name="fromname" class="newsletter-forms-input-text required fieldToDisable" onblur="javascript:onblurvalidate();"/></td>
+                            <td><input type="text" name="fromname" class="newsletter-forms-input-text required fieldToDisable"/></td>
                         </tr>
                         <tr>
                             <td><label><fmt:message key="newsletter.admin.category.fromemail" bundle="${newsletter}"/></label></td>
-                            <td><input type="text" name="fromemail" class="newsletter-forms-input-text required fieldToDisable" onblur="javascript:onblurvalidate();"/></td>
+                            <td><input type="text" name="fromemail" class="newsletter-forms-input-text required fieldToDisable"/></td>
                         </tr>
                         <tr>
                             <td><label><fmt:message key="newsletter.admin.category.adminemail" bundle="${newsletter}"/></label></td>
@@ -276,4 +260,5 @@
             </div>
             <div style="display: none;" id="ckEditorContainer<portlet:namespace/>"></div>
         </div>
-
+    </body>
+</html>

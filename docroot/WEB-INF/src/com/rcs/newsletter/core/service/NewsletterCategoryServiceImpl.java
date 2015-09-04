@@ -67,20 +67,20 @@ public class NewsletterCategoryServiceImpl extends CRUDServiceImpl<NewsletterCat
     }
 
     private Criteria createCriteriaForCategories(ThemeDisplay themeDisplay, GridForm gridForm){
-			Session currentSession = sessionFactory.getCurrentSession();
-			Criteria criteria = currentSession.createCriteria(NewsletterCategory.class);
-			criteria.add(Restrictions.eq(NewsletterEntity.COMPANYID, themeDisplay.getCompanyId()));        
-			criteria.add(Restrictions.eq(NewsletterEntity.GROUPID, themeDisplay.getScopeGroupId()));
-			
-			// add search filters
-			if (gridForm != null){
-			    Criterion criterion = GridRestrictionsUtil.createCriterion(gridForm.getFiltersForm());
-			    if (criterion != null){
-			        criteria.add(criterion);
-			    }
-			}
-			
-			return criteria;
+	    	Session currentSession = sessionFactory.getCurrentSession();
+	        Criteria criteria = currentSession.createCriteria(NewsletterCategory.class);
+	        criteria.add(Restrictions.eq(NewsletterEntity.COMPANYID, themeDisplay.getCompanyId()));        
+	        criteria.add(Restrictions.eq(NewsletterEntity.GROUPID, themeDisplay.getScopeGroupId()));
+	        
+	        // add search filters
+	        if (gridForm != null){
+	            Criterion criterion = GridRestrictionsUtil.createCriterion(gridForm.getFiltersForm());
+	            if (criterion != null){
+	                criteria.add(criterion);
+	            }
+	        }
+	        
+	        return criteria;
     }
     
     @SuppressWarnings("unchecked")
