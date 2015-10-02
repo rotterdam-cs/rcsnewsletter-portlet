@@ -2,11 +2,13 @@ package com.rcs.newsletter.portlets.newsletteradmin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import org.jdto.DTOBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,6 +39,9 @@ public class ScheduleController extends GenericController {
     @Autowired
     private NewsletterMailingService mailingService;
     
+    @Autowired
+    private DTOBinder binder;      
+    
     @ResourceMapping("schedule")
     public ModelAndView archiveTab(ResourceRequest request, ResourceResponse response){
         Map<String,Object> model = new HashMap<String,Object>();
@@ -65,21 +70,41 @@ public class ScheduleController extends GenericController {
      * @return 
      */
     @ResourceMapping(value="getSchedules")
-    public ModelAndView getArchives(ResourceRequest request, ResourceResponse response, @ModelAttribute GridForm form){
+    public ModelAndView getSchedules(
+    		ResourceRequest request, 
+    		ResourceResponse response, 
+    		@ModelAttribute GridForm gridForm
+    	){
+    	
         // get records using paging
         ServiceActionResult<ListResultsDTO<NewsletterScheduleDTO>> result = scheduleService.findAllSchedules(
             Utils.getThemeDisplay(request), 
-            form, 
+            gridForm, 
             "sendDate", 
             ORDER_BY_DESC
         );
 
-       logger.info("CompanyId: "+ Utils.getThemeDisplay(request).getCompanyId());
+        logger.info("CompanyId: "+ Utils.getThemeDisplay(request).getCompanyId());
         logger.info("ThemeId: "+Utils.getThemeDisplay(request).getThemeId());
 
+        
+        List<NewsletterScheduleDTO> newsletterSchedules;
+        newsletterSchedules = result.getPayload().getResult(); 
+        
+        // get total records count
+		int totalRecords = newsletterSchedules.size();        
+        
+        int max = ((gridForm.calculateStart()+gridForm.getRows()) > totalRecords) ? totalRecords : gridForm.calculateStart()+gridForm.getRows(); 
+        List<NewsletterScheduleDTO> sublist = newsletterSchedules.subList(gridForm.calculateStart(), max);		
+        
+        // create and return ListResultsDTO
+        ListResultsDTO<NewsletterScheduleDTO> dto = new ListResultsDTO<NewsletterScheduleDTO>(gridForm.getRows(), gridForm.calculateStart(), totalRecords, binder.bindFromBusinessObjectList(NewsletterScheduleDTO.class, sublist));
+        result = ServiceActionResult.buildSuccess(dto);                
+        
+        
         // if an error occurrs then return no record
         if (result.isSuccess()){
-            result.getPayload().setCurrentPage(form.getPage());
+            result.getPayload().setCurrentPage(gridForm.getPage());
         }else{
             result.getPayload().setCurrentPage(0);
             result.getPayload().setResult(new ArrayList<NewsletterScheduleDTO>());

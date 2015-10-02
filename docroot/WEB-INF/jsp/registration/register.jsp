@@ -26,9 +26,6 @@
 
 <div id="newsletter-registration-panel-<portlet:namespace/>"></div>
 
-</body>
-
-
 <script type="text/javascript">
      Liferay.on('portletReady', function(event) {
             if('_' + event.portletId + '_' != '<portlet:namespace/>') {

@@ -1,7 +1,9 @@
 package com.rcs.newsletter.portlets.newsletteradmin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -10,6 +12,7 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import org.jdto.DTOBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,6 +42,9 @@ public class NewsletterAdminController extends GenericController {
     @Autowired
     private NewsletterCategoryService categoryService;
     
+    @Autowired
+    private DTOBinder binder;    
+    
     @RenderMapping
     public ModelAndView initialView(RenderRequest request, RenderResponse response){
         Map<String,Object> model = new HashMap<String,Object>();
@@ -53,9 +59,33 @@ public class NewsletterAdminController extends GenericController {
     
     @ResourceMapping("getLists")
     public ModelAndView getLists(ResourceRequest request, @ModelAttribute GridForm gridForm){
-        ServiceActionResult<ListResultsDTO<NewsletterCategoryDTO>> sarCategories = 
+    	
+        ServiceActionResult<ListResultsDTO<NewsletterCategoryDTO>> result = 
                 categoryService.findAllNewsletterCategories(Utils.getThemeDisplay(request), gridForm);
-        return jsonResponse(sarCategories);
+        
+        List<NewsletterCategoryDTO> newsletterCategories;
+        newsletterCategories = result.getPayload().getResult(); 
+        
+        // get total records count
+		int totalRecords = newsletterCategories.size();        
+        
+        int max = ((gridForm.calculateStart()+gridForm.getRows()) > totalRecords) ? totalRecords : gridForm.calculateStart()+gridForm.getRows(); 
+        List<NewsletterCategoryDTO> sublist = newsletterCategories.subList(gridForm.calculateStart(), max);		
+        
+        // create and return ListResultsDTO
+        ListResultsDTO<NewsletterCategoryDTO> dto = new ListResultsDTO<NewsletterCategoryDTO>(gridForm.getRows(), gridForm.calculateStart(), totalRecords, binder.bindFromBusinessObjectList(NewsletterCategoryDTO.class, sublist));
+        result = ServiceActionResult.buildSuccess(dto);
+        
+        // if an error occurrs then return no record
+        if (result.isSuccess()){
+            result.getPayload().setCurrentPage(gridForm.getPage());
+        }else{
+            result.getPayload().setCurrentPage(0);
+            result.getPayload().setResult(new ArrayList<NewsletterCategoryDTO>());
+            result.getPayload().setTotalRecords(0);
+        }        
+        
+        return jsonResponse(result);
     }
     
     @ResourceMapping("addEditDeleteList")

@@ -19,7 +19,7 @@ public class NewsletterScheduleDTO  implements Serializable {
     private Boolean pending;
     
     @Source("mailing.id")
-    private long mailingId;
+    private Long mailingId;
     
     @Source("mailing.name")
     private String mailing;
@@ -53,11 +53,11 @@ public class NewsletterScheduleDTO  implements Serializable {
 		this.pending = pending;
 	}
 
-	public long getMailingId() {
+	public Long getMailingId() {
 		return mailingId;
 	}
 
-	public void setMailingId(long mailingId) {
+	public void setMailingId(Long mailingId) {
 		this.mailingId = mailingId;
 	}
 

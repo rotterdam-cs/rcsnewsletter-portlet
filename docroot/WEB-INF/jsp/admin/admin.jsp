@@ -20,8 +20,7 @@
 <portlet:resourceURL id="schedule" var="scheduleURL"/>
 <portlet:resourceURL id="untagging" var="untaggingURL"/>
 
-<html>
-    <head>
+
         <script type="text/javascript">
             Liferay.on('portletReady', function(event) {
                 if('_' + event.portletId + '_' != '<portlet:namespace/>') {
@@ -43,8 +42,7 @@
             });
         </script>
         <%@include file="../commons/errorsFunctions.jsp" %>
-    </head>
-    <body>
+
         <div id="newsletterAdmin<portlet:namespace/>" class="newsletter-admin-wrapper">
             <ul>
                 <li><a href="${listsURL}"><fmt:message key="newsletter.admin.lists"/></a></li>
@@ -68,5 +66,4 @@
         	});	
         
         </script>
-    </body>
-</html>
+

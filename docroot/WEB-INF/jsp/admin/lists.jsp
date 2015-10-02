@@ -20,8 +20,6 @@
 <portlet:resourceURL id="getListData" var="getListDataURL"/>
 <portlet:resourceURL id="getCKEditor" var="getCKEditorURL"/>
 
-<html>
-    <head>
         <script type="text/javascript">
             function initTab(){
                 jQuery('#formContainer<portlet:namespace/>').hide();
@@ -58,6 +56,7 @@
                             root: "payload.result",
                             page: "payload.currentPage",
                             total: "payload.totalPages",
+                            records: "payload.totalRecords",   
                             repeatitems : false,
                             id : "id"
                         },
@@ -201,8 +200,7 @@
                 }
             }
         </script>
-    </head>
-    <body>
+
         <!-- LISTS TAB -->
         <div id="lists<portlet:namespace/>">
             <!-- Errors viewer -->
@@ -260,5 +258,4 @@
             </div>
             <div style="display: none;" id="ckEditorContainer<portlet:namespace/>"></div>
         </div>
-    </body>
-</html>
+

@@ -2,12 +2,14 @@ package com.rcs.newsletter.portlets.newsletteradmin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import org.jdto.DTOBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,6 +39,8 @@ public class TemplatesController extends GenericController {
     private NewsletterTemplateService templateService;
     
     
+    @Autowired
+    private DTOBinder binder;    
     
     
     /**
@@ -75,17 +79,35 @@ public class TemplatesController extends GenericController {
      * @return 
      */
     @ResourceMapping(value="getTemplatesList")
-    public ModelAndView templatesList(ResourceRequest request, ResourceResponse response, @ModelAttribute GridForm form){
+    public ModelAndView templatesList(
+    		ResourceRequest request, 
+    		ResourceResponse response, 
+    		@ModelAttribute GridForm gridForm
+    	){
+    	
         // get records using paging
         ServiceActionResult<ListResultsDTO<NewsletterTemplateDTO>> result = templateService.findAllTemplates(
                                     Utils.getThemeDisplay(request), 
-                                    form, 
+                                    gridForm, 
                                     "name", 
                                     ORDER_BY_ASC);
 
+        List<NewsletterTemplateDTO> newsletterTemplates;
+        newsletterTemplates = result.getPayload().getResult(); 
+        
+        // get total records count
+		int totalRecords = newsletterTemplates.size();        
+        
+        int max = ((gridForm.calculateStart()+gridForm.getRows()) > totalRecords) ? totalRecords : gridForm.calculateStart()+gridForm.getRows(); 
+        List<NewsletterTemplateDTO> sublist = newsletterTemplates.subList(gridForm.calculateStart(), max);		
+        
+        // create and return ListResultsDTO
+        ListResultsDTO<NewsletterTemplateDTO> dto = new ListResultsDTO<NewsletterTemplateDTO>(gridForm.getRows(), gridForm.calculateStart(), totalRecords, binder.bindFromBusinessObjectList(NewsletterTemplateDTO.class, sublist));
+        result = ServiceActionResult.buildSuccess(dto);        
+        
         // if an error occurrs then return no record
         if (result.isSuccess()){
-            result.getPayload().setCurrentPage(form.getPage());
+            result.getPayload().setCurrentPage(gridForm.getPage());
         }else{
             result.getPayload().setCurrentPage(0);
             result.getPayload().setResult(new ArrayList<NewsletterTemplateDTO>());

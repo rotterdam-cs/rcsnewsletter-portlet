@@ -22,8 +22,7 @@
 </portlet:actionURL>
 <portlet:resourceURL var="exportSubscribersURL" id="exportSubscribers"/>
 
-<html>
-    <head>
+
         <script type="text/javascript">
             jQuery(document).ready(function(){
                 fillListsCombo();
@@ -36,11 +35,17 @@
                 jQuery('#cancelImportSubscribers<portlet:namespace/>').button();
                 
                 function fillListsCombo(){
-                    var elements = '<option value=""><fmt:message key="newsletter.admin.general.all.lists"/></option>';
+                    var elements = "<option value=''><fmt:message key="newsletter.admin.general.all.lists"/></option>";
                     <c:forEach items="${lists}" var="list">
-                    elements += '<option value="${list.id}">${list.name}</option>';
-                    </c:forEach>
+                    
+                    	var the_name = "${list.name}";
+                    	the_name.replace(/(['"])/g, "\\$1");
+                    	elements += "<option value='${list.id}'>" + the_name + "</option>";
+                    
+                    	</c:forEach>
                     jQuery('#listsCombo<portlet:namespace/>').append(elements);
+                    
+                    
                 }
                 
                 function createGrid() {
@@ -250,8 +255,7 @@
                 
             });
         </script>
-    </head>
-    <body>
+
         <%@include file="../commons/errorsView.jsp" %>
         
         <%-- GRID --%>
@@ -352,5 +356,3 @@
                 </table>
             </form>
         </div>
-    </body>
-</html>

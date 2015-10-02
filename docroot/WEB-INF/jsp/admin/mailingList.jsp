@@ -216,10 +216,11 @@
             ],
             jsonReader : {
                 root: "payload.result",
+                page: "payload.currentPage",                
+                total: "payload.totalPages",
+                records: "payload.totalRecords",
                 repeatitems : false,
-                id : "id",
-                page: "payload.currentPage",
-                total: "payload.totalPages"
+                id : "id"
             },
             gridComplete: function() {
                 var ids = jQuery("#mailing-list-<portlet:namespace/>").jqGrid('getDataIDs');
